@@ -2,7 +2,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
 import {Record3DVideoRenderingMode} from "./Record3DVideo.js"
+
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
+
 
 export class Record3DScene
 {
@@ -19,23 +21,12 @@ export class Record3DScene
         this.camera.position.z = 0.2;
         this.camera.lookAt(new THREE.Vector3(0,0,0));
 
+        /*
         // Camera control settings
         this.controls = new OrbitControls(this.camera, this.renderer.domElement);
         this.controls.enableZoom = true;
-
-        // ここから変更
-        this.controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.DOLLY,
-            RIGHT: THREE.MOUSE.PAN
-        };
-        this.controls.screenSpacePanning = false; // x-z平面でのパンをより正確にするため
-
-        // ここを追加・変更：パンの速度を10倍にする
-        this.controls.panSpeed = 100; 
-
         this.controls.update();
-        // ここまで変更
+        */
 
         this.pointClouds = [];
 
@@ -51,7 +42,7 @@ export class Record3DScene
         // Setup UI
         this.options = {
             modelScale: 1.0,
-            modelPointSize: 1.0,
+            modelPointSize: 10.0,
             toggleSound: () => {
                 for (let video of self.pointClouds)
                     video.toggleSound();
@@ -90,70 +81,37 @@ export class Record3DScene
         gui.add(this.options, 'toggleMeshPoints').name('Render points/mesh');
 
 
+
         const loader = new FBXLoader();
         loader.load('models/HallOfLight.fbx', (object) => {
             object.scale.set(0.01, 0.01, 0.01);
             object.position.set(5,-10,30);
-
             const scene = this.mainScene;
             scene.add(object);
+            scene.add(new THREE.AmbientLight(0xffffff, 1.5));
 
             // 点光源を作成して中央に配置
+            const pointLight = new THREE.PointLight(0xffffff, 50, 1000); // 色, 強度, 距離
+            pointLight.position.set(0, 100, 0);
+            scene.add(pointLight);
 
-            for( let x=-5;x<=5;x+=10)for( let z=-5;z<=5;z+=10){
-                const r = 0xFF; // 赤は固定
-                const g = Math.floor(Math.random() * 256); // 緑：0〜255
-                const b = Math.floor(Math.random() * 256); // 青：0〜255
+            // 光の位置が分かりやすいようにヘルパーも追加（開発用）
+            const pointLightHelper = new THREE.PointLightHelper(pointLight, 10);
+            scene.add(pointLightHelper);
 
-                const colorHex = (r << 16) | (g << 8) | b;
-                const pointLight = new THREE.PointLight(colorHex, 50, 1000); // 色, 強度, 距離
-                pointLight.position.set(x,Math.random()*100, z);
-                //pointLight.position.set(0, 100, 0);
-                scene.add(pointLight);
-
-                // 光の位置が分かりやすいようにヘルパーも追加（開発用）
-                const pointLightHelper = new THREE.PointLightHelper(pointLight, 10);
-                scene.add(pointLightHelper);
-                //break;
-            }
 
         }, undefined, (error) => {
             console.error('FBX読み込みエラー:', error);
         });
 
 
-        const geometry = new THREE.PlaneGeometry(100, 100);
-        const material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
-        const plane = new THREE.Mesh(geometry, material);
 
-        // Zの正方向を向ける（デフォルトで面の法線は +Z なので回転不要）
-        plane.position.set(0, 0, -42);
-
-        this.mainScene.add(plane);
-        this.mainScene.add(new THREE.AmbientLight(0xffffff, 10));
 
     }
 
     addVideo(r3dVideo)
     {
-        function applyTransToModel(obj){
-
-            const addRotationQuaternion = new THREE.Quaternion();
-            const rotDegree = -15;
-            addRotationQuaternion.setFromAxisAngle(
-                new THREE.Vector3(1, 0, 0), Math.PI * rotDegree / 180.0);
-
-            obj.quaternion.multiply(addRotationQuaternion);
-
-            const sc = 10;
-            obj.scale.set(sc,sc,sc);
-            obj.position.y += 5;
-            obj.position.z -= 23;
-        }
-
         this.pointClouds.push(r3dVideo);
-
-        applyTransToModel(r3dVideo.videoObject);
         this.mainScene.add(r3dVideo.videoObject);
     }
 

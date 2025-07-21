@@ -15,7 +15,6 @@ export class OfflineVideoSource
         this.maxNumPoints = 720 * 960;
         this.lastVideoSize = {width: 0, height: 0};
         this.onVideoChange = () => {};
-
         let self = this;
 
         this.videoTag.onloadeddata = (e) => {

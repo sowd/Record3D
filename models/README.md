@@ -1,0 +1,1 @@
+[HallOfLight.fbx](https://www.cgtrader.com/free-3d-models/architectural/window/hall-of-light)

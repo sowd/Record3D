@@ -98,17 +98,8 @@ export function getPointCloudShaderMaterial()
                 (iK.y * float(ptY) + iK.w) * currDepth,
                 -currDepth
             );
-
-            /*if( ptPos.z < 0.1 )
-            {
-                vShouldDiscard = 1.0;
-                gl_Position = vec4(0.0);
-                return;
-            }*/
-
-
+            
             vec4 mvPos = modelViewMatrix * vec4(ptPos, 1.0);
-
             gl_Position = projectionMatrix * mvPos;
             
             vPtPos = vec2( float(ptX), float(ptY) );

@@ -20,8 +20,8 @@
                 <h1 class="float-md-start mb-0"><a href="https://record3d.app/" class="text-white">Record3D</a></h1>
             </div>
         </header>
+
         <main class="px-3">
-            <input type="button" value="demo shortcut" id="demoshortcut"></input>
             <h1>Wi-Fi Streaming & RGBD mp4 3D&nbsp;Video Demo</h1>
             <p class="lead">All processing happens locally. The video is NOT uploaded to any servers.</p>
             <p class="lead">
@@ -111,26 +111,10 @@
         };
 
         // Setup url video
-        function setupUrlVideo(elemName,url){
-            const demoInput = document.getElementById(elemName)
-            demoInput.onclick = e => onUrlVideoPassed(url)
-            if(document.location.hash === "#demo") setTimeout(() => onUrlVideoPassed(URL_DEMO_VIDEO_GOAT)) //after the js loads
-        }
+        const demoInput = document.getElementById('input-mp4-demo')
         const URL_DEMO_VIDEO_GOAT = 'record3d_goat.mp4'
-        setupUrlVideo('input-mp4-demo',URL_DEMO_VIDEO_GOAT)
-        setupUrlVideo('demoshortcut'
-            ,URL_DEMO_VIDEO_GOAT
-            //,'data/violin-bach.mp4'
-            //,'data/violin-bach-orig.mp4'
-        );
-
-        /*
-            const demoInput = document.getElementById('input-mp4-demo')
-            const URL_DEMO_VIDEO_GOAT = 'record3d_goat.mp4'
-            demoInput.onclick = e => onUrlVideoPassed(URL_DEMO_VIDEO_GOAT)
-            if(document.location.hash === "#demo") setTimeout(() => onUrlVideoPassed(URL_DEMO_VIDEO_GOAT)) //after the js loads
-
-        */
+        demoInput.onclick = e => onUrlVideoPassed(URL_DEMO_VIDEO_GOAT)
+        if(document.location.hash === "#demo") setTimeout(() => onUrlVideoPassed(URL_DEMO_VIDEO_GOAT)) //after the js loads
 
         function onUrlVideoPassed(url) {
             document.getElementById('landing-page').remove();
@@ -141,13 +125,6 @@
             scene.runloop();
             scene.addVideo(new Record3DVideo(httpVideo));
         }
-
-        //////////
-        onclick="onUrlVideoPassed(record3d_goat.mp4)"
-
-
-
-
 
 
         // Setup offline video loading
