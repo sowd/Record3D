@@ -1,7 +1,7 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'
-import {Record3DVideoRenderingMode} from "./Record3DVideo.js"
+import { Record3DVideoRenderingMode } from "./Record3DVideo.js"
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 export class Record3DScene
@@ -66,6 +66,9 @@ export class Record3DScene
                                                 Record3DVideoRenderingMode.POINTS : Record3DVideoRenderingMode.MESH;
                     video.switchRenderingTo(newRenderingMode);
                 }
+            },
+            toggleBoundaryBoxEditMode: ()=>{
+
             }
         };
         let gui = new GUI();
@@ -88,8 +91,9 @@ export class Record3DScene
         gui.add(this.options, 'toggleSound').name('Mute/Unmute');
         gui.add(this.options, 'toggleVideo').name('Play/Pause');
         gui.add(this.options, 'toggleMeshPoints').name('Render points/mesh');
+        gui.add(this.options, 'toggleBoundaryBoxEditMode').name('Boundary box edit mode');
 
-
+        /*
         const loader = new FBXLoader();
         loader.load('models/HallOfLight.fbx', (object) => {
             object.scale.set(0.01, 0.01, 0.01);
@@ -125,11 +129,11 @@ export class Record3DScene
         const geometry = new THREE.PlaneGeometry(100, 100);
         const material = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.DoubleSide });
         const plane = new THREE.Mesh(geometry, material);
-
         // Zの正方向を向ける（デフォルトで面の法線は +Z なので回転不要）
         plane.position.set(0, 0, -42);
 
         this.mainScene.add(plane);
+        */
         this.mainScene.add(new THREE.AmbientLight(0xffffff, 10));
 
     }

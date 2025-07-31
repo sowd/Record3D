@@ -15,7 +15,13 @@ export function getPointCloudShaderMaterial()
         uniform vec4 iK;
         uniform float scale;
         uniform float ptSize;
-        
+
+
+        uniform bool enableClipPlane0,enableClipPlane1,enableClipPlane2,enableClipPlane3,enableClipPlane4,enableClipPlane5;
+        uniform vec3 clipPlanePos0,clipPlanePos1,clipPlanePos2,clipPlanePos3,clipPlanePos4,clipPlanePos5;
+        uniform vec3 clipPlaneNorm0,clipPlaneNorm1,clipPlaneNorm2,clipPlaneNorm3,clipPlaneNorm4,clipPlaneNorm5;
+
+
         // Filtering constants
         const int filterSize = 1;
         const float depthThresholdFilter = 0.05; // In meters. Smaller values = more aggressive filtering
@@ -99,12 +105,20 @@ export function getPointCloudShaderMaterial()
                 -currDepth
             );
 
-            /*if( ptPos.z < 0.1 )
-            {
+            if( (enableClipPlane0 && dot( ptPos - clipPlanePos0 , clipPlaneNorm0 ) < 0.0 )
+            ||  (enableClipPlane1 && dot( ptPos - clipPlanePos1 , clipPlaneNorm1 ) < 0.0 )
+            ||  (enableClipPlane2 && dot( ptPos - clipPlanePos2 , clipPlaneNorm2 ) < 0.0 )
+            ||  (enableClipPlane3 && dot( ptPos - clipPlanePos3 , clipPlaneNorm3 ) < 0.0 )
+            ||  (enableClipPlane4 && dot( ptPos - clipPlanePos4 , clipPlaneNorm4 ) < 0.0 )
+            ||  (enableClipPlane5 && dot( ptPos - clipPlanePos5 , clipPlaneNorm5 ) < 0.0 )
+            ){
                 vShouldDiscard = 1.0;
                 gl_Position = vec4(0.0);
                 return;
-            }*/
+            }
+
+
+
 
 
             vec4 mvPos = modelViewMatrix * vec4(ptPos, 1.0);
@@ -152,6 +166,31 @@ export function getPointCloudShaderMaterial()
             iK: { type: 'f4', value: [0, 0, 0, 0] },
             scale: { type: 'f', value: 1.0 },
             ptSize: { type: 'f', value: 1.0 },
+
+            enableClipPlane0: {type: 'b', value: false},
+            clipPlanePos0: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm0: { type: 'f3', value: [0, 0, 0] },
+
+            enableClipPlane1: {type: 'b', value: false},
+            clipPlanePos1: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm1: { type: 'f3', value: [0, 0, 0] },
+
+            enableClipPlane2: {type: 'b', value: false},
+            clipPlanePos2: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm2: { type: 'f3', value: [0, 0, 0] },
+
+            enableClipPlane3: {type: 'b', value: false},
+            clipPlanePos3: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm3: { type: 'f3', value: [0, 0, 0] },
+
+            enableClipPlane4: {type: 'b', value: false},
+            clipPlanePos4: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm4: { type: 'f3', value: [0, 0, 0] },
+
+            enableClipPlane5: {type: 'b', value: false},
+            clipPlanePos5: { type: 'f3', value: [0, 0, 0] },
+            clipPlaneNorm5: { type: 'f3', value: [0, 0, 0] },
+
         },
         side: THREE.DoubleSide,
         transparent: false,

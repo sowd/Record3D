@@ -61,6 +61,10 @@ export class Record3DVideo
 
         this.material.uniforms.iK.value = [ifx, ify, itx, ity];
 
+        //this.enableBBox([-1,-1,-2], [1,1,1]);
+        this.enableClipPlane(0,[-1,0,0], [1,0,0]);
+        this.enableClipPlane(1,[1,0,0], [-1,0,0]);
+
         this.switchRenderingTo(this.renderingMode)
     }
 
@@ -159,6 +163,7 @@ export class Record3DVideo
         console.log(this.material.uniforms.texSize.value)
     }
 
+
     toggle()
     {
         this.videoSource.toggle();
@@ -182,4 +187,35 @@ export class Record3DVideo
             video.material.uniforms.ptSize.value = ptSize;
         }
     }
+
+
+    enableBBox(pos0,pos1){
+        this.enableClipPlane(0,[pos0[0],0,0], [1,0,0]);
+        this.enableClipPlane(1,[pos1[0],0,0], [-1,0,0]);
+        this.enableClipPlane(2,[0,pos0[1],0], [0,1,0]);
+        this.enableClipPlane(3,[0,pos1[1],0], [0,-1,0]);
+        this.enableClipPlane(4,[0,0,pos0[2]], [0,0,1]);
+        this.enableClipPlane(5,[0,0,pos1[2]], [0,0,-1]);
+    }
+    disableBBox(){
+        for(let i = 0; i < 6; i++)
+            this.disableClipPlane(i);
+    }
+    enableClipPlane(id,pos,norm){
+        if (id < 0 || id > 5) {
+            console.error("Invalid clip plane ID. Must be between 1 and 6.");
+            return;
+        }
+        this.material.uniforms['enableClipPlane'+id].value = true;
+        this.material.uniforms['clipPlanePos'+id].value = pos;
+        this.material.uniforms['clipPlaneNorm'+id].value = norm;
+    }
+    disableClipPlane(id){
+        if (id < 0 || id > 5) {
+            console.error("Invalid clip plane ID. Must be between 1 and 6.");
+            return;
+        }
+        this.material.uniforms['enableClipPlane'+id].value = false;
+    }
+
 }
