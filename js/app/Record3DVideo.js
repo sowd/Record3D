@@ -61,9 +61,11 @@ export class Record3DVideo
 
         this.material.uniforms.iK.value = [ifx, ify, itx, ity];
 
-        //this.enableBBox([-1,-1,-2], [1,1,1]);
-        this.enableClipPlane(0,[-1,0,0], [1,0,0]);
-        this.enableClipPlane(1,[1,0,0], [-1,0,0]);
+        //this.enableBBox([-1,-1.1,-3], [.5,1,1]);
+        //this.enableClipPlane(2,[0,-1.0,0], [-0.05,1,-0.02]);
+
+        //this.enableClipPlane(0,[-1,0,0], [1,0,0]);
+        //this.enableClipPlane(1,[1,0,0], [-1,0,0]);
 
         this.switchRenderingTo(this.renderingMode)
     }

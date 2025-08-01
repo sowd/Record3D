@@ -1,5 +1,39 @@
 # [Record3D](https://record3d.app)'s Wi-Fi Streaming & RGBD mp4 3D Video Demo
 
+## How to add point rendering into 3js-examples/*.html
+
+After the scene is created, add the following two lines.
+
+```
+    import * as R3D from '../js/r3d_interface.js'
+    R3D.init(scene);
+```
+
+Optionally, setup the properties/transformation of the pointset.
+```
+    import * as R3D from '../js/r3d_interface.js'
+    R3D.init(scene,pointSet=>{
+        const obj = pointSet.videoObject;
+        const addRotationQuaternion = new THREE.Quaternion();
+        const rotDegree = -15;
+        addRotationQuaternion.setFromAxisAngle(
+            new THREE.Vector3(1, 0, 0), Math.PI * rotDegree / 180.0);
+
+        obj.quaternion.multiply(addRotationQuaternion);
+
+        const sc = 10;
+        obj.scale.set(sc,sc,sc);
+        obj.position.y += 5;
+        obj.position.z -= 23;
+
+
+        pointSet.disableBBox();
+    });
+```
+
+
+
+
 *New feature (2021-03-07): Added an AR demo (`ar.html`), which you can try at [https://record3d.app/ar](https://record3d.app/ar). You will need to point your camera at the [Hiro marker](https://stemkoski.github.io/AR-Examples/markers/hiro.png) to see the 3D Video in AR.* 
 
 This is a demo project for the [Record3D](https://record3d.app) iOS app. You can test the demo at this address: [http://record3d.xyz](http://record3d.xyz).
